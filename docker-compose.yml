@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  shoplify:
+    image: ${DOCKER_REGISTRY-}shoplify
+    build:
+      context: .
+      dockerfile: Shoplify/Dockerfile
