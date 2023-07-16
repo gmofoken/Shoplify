@@ -8,3 +8,5 @@ services:
       dockerfile: Shoplify/Dockerfile
   db:
     image: "mcr.microsoft.com/mssql/server:2017-latest"
+  minio:
+    image: "quay.io/minio/minio"
