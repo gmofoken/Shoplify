@@ -6,3 +6,5 @@ services:
     build:
       context: .
       dockerfile: Shoplify/Dockerfile
+  db:
+    image: "mcr.microsoft.com/mssql/server:2017-latest"
