@@ -51,10 +51,22 @@ namespace Shoplify.Services.DataServices.CartDataServices.Implementation
         {
             using (ShoplifyContext context = new ShoplifyContext(_DataContext.Options))
             {
-                var cart = context.Cart.Where(x => x.UserId == userID && x.Active).Include(p => p.Items).ToListAsync().Result;
+                var cart = context.Cart.Where(x => x.UserId == userID && x.Active).Include(p => p.Items.Where(a => a.Active)).ToListAsync().Result;
                 //var productIDs = cart.P
 
                 return cart[0].Items;
+            }
+        }
+
+        public bool RemoveItem(Int64 itemID, Int64 userID)
+        {
+            using (ShoplifyContext context = new ShoplifyContext(_DataContext.Options))
+            {
+                var cart = context.Cart.Where(x => x.UserId == userID && x.Active).Include(i => i.Items).FirstOrDefault();
+                cart.Items.Where(i => i.ItemID == itemID).FirstOrDefault().Active = false;
+                context.Cart.Update(cart);
+                context.SaveChanges();
+                return true;
             }
         }
 

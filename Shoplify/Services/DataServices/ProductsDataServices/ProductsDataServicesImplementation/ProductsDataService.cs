@@ -28,5 +28,51 @@ namespace Shoplify.Services.DataServices.ProductsDataServices.ProductsDataServic
             }
             return false;
         }
+
+        public bool ActivateProduct(Products product)
+        {
+            using (ShoplifyContext context = new ShoplifyContext(_DataContext.Options))
+            {
+                context.Products.Update(product);
+                context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
+        public bool DeactivateProduct(Products product)
+        {
+            using (ShoplifyContext context = new ShoplifyContext(_DataContext.Options))
+            {
+                context.Products.Update(product);
+                context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
+        public Products GetProduct(Int64 productID)
+        {
+            using (ShoplifyContext context = new ShoplifyContext(_DataContext.Options))
+            {
+                return context.Products.FindAsync(productID).Result;
+            }
+        }
+
+        public List<Products> GetActiveProducts()
+        {
+            using (ShoplifyContext context = new ShoplifyContext(_DataContext.Options))
+            {
+                return context.Products.Where(x => x.Active).ToListAsync().Result;
+            }
+        }
+
+        public List<Products> GetInActiveProducts()
+        {
+            using (ShoplifyContext context = new ShoplifyContext(_DataContext.Options))
+            {
+                return context.Products.Where(x => !x.Active).ToListAsync().Result;
+            }
+        }
     }
 }

@@ -3,28 +3,55 @@ using Shoplify.Models;
 using Shoplify.Models.DTOs;
 using Shoplify.Ochestration.CartOchestration.Interface;
 using Shoplify.Services.DataServices.CartDataServices.Interface;
+using Shoplify.Services.DataServices.ProductsDataServices.ProductsDataServicesInterface;
+using Shoplify.Services.DataServices.UsersDataServices.Interface;
 
 namespace Shoplify.Ochestration.CartOchestration.Implementation
 {
     public class CartOchestration : ICartOchestrationcs
     {
         private readonly ICartDataService _CartDataService;
+        private readonly IUserDataService _UsersDataService;
+        private readonly IProductsDataService _ProductDataService;
         private readonly IMapper _Mapper;
 
-        public CartOchestration(ICartDataService cartDataService, IMapper mapper)
+        public CartOchestration(ICartDataService cartDataService, IMapper mapper, IUserDataService userDataService, IProductsDataService productsDataService)
         {
             _Mapper = mapper;
             _CartDataService = cartDataService;
+            _UsersDataService = userDataService;
+            _ProductDataService = productsDataService;
         }
 
-        public List<Models.DTOs.Item> ListItems(Int64 UserID)
+        public string RemoveItem(Int64 itemId, string userName)
         {
             try
             {
-                var results = _CartDataService.GetProducts(UserID);
+                var userID = _UsersDataService.GetUser(userName).UserID;
+                _CartDataService.RemoveItem(itemId, userID);
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("Error removing item"));
+            }
+
+            return $"Item removed";
+        }
+
+        public List<Models.DTOs.Item> ListItems(string userName = "string")
+        {
+            try
+            {
+                var userID = _UsersDataService.GetUser(userName).UserID;
+
+                var results = _CartDataService.GetProducts(userID);
 
                 List<Models.DTOs.Item> items = new List<Models.DTOs.Item>();
-                items.ForEach(x => items.Add(_Mapper.Map<Models.DTOs.Item>(x)));
+                foreach (var item in results)
+                {
+                    items.Add(_Mapper.Map<Models.DTOs.Item>(item));
+                }
+
                 return items;
             }
             catch (Exception)
@@ -33,12 +60,17 @@ namespace Shoplify.Ochestration.CartOchestration.Implementation
             }
         }
 
-        public string CreateCart(Models.DTOs.Item product, Int64 userID)
+        public string CreateCart(AddItem items, Int64 userID)
         {
             var cart = _CartDataService.LookUpCart(1);
+            var product = _ProductDataService.GetProduct(items.ProductID);
+
+            if (product == null)
+                return $"product not available/does not exist";
+
             if (cart != null && cart.Active)
             {
-                cart.Items.Add(new Models.Item() { ProductID = product.ProductID, Description = product.Description, Price = product.Price });
+                cart.Items.Add(new Models.Item() { ProductID = items.ProductID, Quantity = items.Quantity });
                 bool added = _CartDataService.AddToCart(cart);
                 if (added)
                     return $"Succesfully created product{product.Description}";
@@ -49,8 +81,7 @@ namespace Shoplify.Ochestration.CartOchestration.Implementation
                 {
                     Active = true,
                     UserId = userID,
-                    TotalValue = product.Price,
-                    Items = new List<Models.Item>() { new Models.Item() { ProductID = product.ProductID, Description = product.Description, Price = product.Price } }
+                    Items = new List<Models.Item>() { new Models.Item() { ProductID = items.ProductID, Quantity = items.Quantity } }
                 };
 
                 bool added = _CartDataService.AddToCart(newCart);

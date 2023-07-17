@@ -8,5 +8,7 @@ namespace Shoplify.Services.DataServices.CartDataServices.Interface
         public Cart LookUpCart(Int64 userID);
         public bool AddToCart(Cart cart);
         public bool CreateCart(Cart cart);
+
+        public bool RemoveItem(Int64 itemID, Int64 userID);
     }
 }

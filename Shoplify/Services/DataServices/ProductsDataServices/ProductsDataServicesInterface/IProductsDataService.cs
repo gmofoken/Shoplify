@@ -5,5 +5,10 @@ namespace Shoplify.Services.DataServices.ProductsDataServices.ProductsDataServic
     public interface IProductsDataService
     {
         public bool AddProduct(Products product);
+        public Products GetProduct(Int64 productID);
+        public List<Products> GetActiveProducts();
+        public List<Products> GetInActiveProducts();
+        public bool ActivateProduct(Products product);
+        public bool DeactivateProduct(Products product);
     }
 }

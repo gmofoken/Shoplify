@@ -9,6 +9,7 @@ namespace Shoplify.Mapping.AutomapperProfiles
         public ProductsMappingProfiles()
         {
             CreateMap<Product, Products>();
+            CreateMap<Products, Product>();
         }
     }
 }

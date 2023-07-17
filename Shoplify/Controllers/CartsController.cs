@@ -23,7 +23,7 @@ namespace Shoplify.Controllers
             _CartOchestration = cartOchestrationcs;
         }
 
-        [HttpGet("ListProducts")]
+        [HttpGet("ListItems")]
         //[DisableCors]
         //[Authorize]
         public ActionResult ListProducts()
@@ -31,7 +31,7 @@ namespace Shoplify.Controllers
             try
             {
 
-                return Ok(_CartOchestration.ListItems(1));
+                return Ok(_CartOchestration.ListItems("string"));
             }
             catch (Exception ex)
             {
@@ -43,15 +43,15 @@ namespace Shoplify.Controllers
         }
 
 
-        [HttpPost("AddProduct")]
+        [HttpPost("AddItem")]
         //[DisableCors]
         //[Authorize]
-        public ActionResult CreateProduct(Item product)
+        public ActionResult CreateProduct(AddItem items)
         {
             try
             {
 
-                return Ok(_CartOchestration.CreateCart(product, 1));
+                return Ok(_CartOchestration.CreateCart(items, 1));
             }
             catch (Exception ex)
             {
@@ -62,5 +62,24 @@ namespace Shoplify.Controllers
             }
         }
 
+
+        [HttpGet("RemoveItem")]
+        //[DisableCors]
+        //[Authorize]
+        public ActionResult RemoveItem(Int64 itemID)
+        {
+            try
+            {
+
+                return Ok(_CartOchestration.RemoveItem(itemID, "string"));
+            }
+            catch (Exception ex)
+            {
+                return new ObjectResult(ex.Message)
+                {
+                    StatusCode = StatusCodes.Status500InternalServerError
+                };
+            }
+        }
     }
 }

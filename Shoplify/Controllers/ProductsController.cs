@@ -19,16 +19,65 @@ namespace Shoplify.Controllers
         }
         
         [HttpPost("CreateProduct")]
-        [DisableCors]
-        [Authorize]
+        //[Authorize]
         public ActionResult CreateProduct(Product product)
         {
             try
             {
-
-                return Ok(_ProductsOchestration.AddProduct(product));
+                return Ok(_ProductsOchestration.AddProduct(product, "string"));
             }
             catch(Exception ex)
+            {
+                return new ObjectResult(ex.Message)
+                {
+                    StatusCode = StatusCodes.Status500InternalServerError
+                };
+            }
+        }
+
+        [HttpPut("DeActivateProduct")]
+        //[Authorize]
+        public ActionResult DeActivateProduct(Int64 ProductID)
+        {
+            try
+            {
+                return Ok(_ProductsOchestration.DeactivateProduct(ProductID, "string"));
+            }
+            catch (Exception ex)
+            {
+                return new ObjectResult(ex.Message)
+                {
+                    StatusCode = StatusCodes.Status500InternalServerError
+                };
+            }
+        }
+
+        [HttpPut("ActivateProduct")]
+        //[Authorize]
+        public ActionResult ActivateProduct(Int64 ProductID)
+        {
+            try
+            {
+                return Ok(_ProductsOchestration.ActivateProduct(ProductID, "string"));
+            }
+            catch (Exception ex)
+            {
+                return new ObjectResult(ex.Message)
+                {
+                    StatusCode = StatusCodes.Status500InternalServerError
+                };
+            }
+        }
+
+        [HttpGet("ListProdcts")]
+        //[Authorize]
+        public ActionResult ListProdcts(bool active)
+        {
+            try
+            {
+                return Ok(_ProductsOchestration.ListProducts(active, "string"));
+            }
+            catch (Exception ex)
             {
                 return new ObjectResult(ex.Message)
                 {
