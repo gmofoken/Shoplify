@@ -5,7 +5,7 @@ namespace Shoplify.Ochestration.ProductsOchestration.ProductsInterface
     public interface IProductsOchestration
     {
         public string AddProduct(Product product, string username);
-        public List<Product> ListProducts(bool active, string userName);
+        public List<ProductList> ListProducts(bool active, string userName);
 
         public string DeactivateProduct(Int64 productID, string userName);
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -24,14 +25,13 @@ namespace Shoplify.Controllers
         }
 
         [HttpGet("ListItems")]
-        //[DisableCors]
-        //[Authorize]
+        [Authorize]
         public ActionResult ListProducts()
         {
             try
             {
 
-                return Ok(_CartOchestration.ListItems("string"));
+                return Ok(_CartOchestration.ListItems(this.User.Identity.Name));
             }
             catch (Exception ex)
             {
@@ -44,14 +44,13 @@ namespace Shoplify.Controllers
 
 
         [HttpPost("AddItem")]
-        //[DisableCors]
-        //[Authorize]
+        [Authorize]
         public ActionResult CreateProduct(AddItem items)
         {
             try
             {
 
-                return Ok(_CartOchestration.CreateCart(items, 1));
+                return Ok(_CartOchestration.CreateCart(items, this.User.Identity.Name));
             }
             catch (Exception ex)
             {
@@ -64,8 +63,7 @@ namespace Shoplify.Controllers
 
 
         [HttpGet("RemoveItem")]
-        //[DisableCors]
-        //[Authorize]
+        [Authorize]
         public ActionResult RemoveItem(Int64 itemID)
         {
             try

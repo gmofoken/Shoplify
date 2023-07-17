@@ -19,12 +19,12 @@ namespace Shoplify.Controllers
         }
         
         [HttpPost("CreateProduct")]
-        //[Authorize]
+        [Authorize]
         public ActionResult CreateProduct(Product product)
         {
             try
             {
-                return Ok(_ProductsOchestration.AddProduct(product, "string"));
+                return Ok(_ProductsOchestration.AddProduct(product, this.User.Identity.Name));
             }
             catch(Exception ex)
             {
@@ -36,12 +36,12 @@ namespace Shoplify.Controllers
         }
 
         [HttpPut("DeActivateProduct")]
-        //[Authorize]
+        [Authorize]
         public ActionResult DeActivateProduct(Int64 ProductID)
         {
             try
             {
-                return Ok(_ProductsOchestration.DeactivateProduct(ProductID, "string"));
+                return Ok(_ProductsOchestration.DeactivateProduct(ProductID, this.User.Identity.Name));
             }
             catch (Exception ex)
             {
@@ -53,12 +53,12 @@ namespace Shoplify.Controllers
         }
 
         [HttpPut("ActivateProduct")]
-        //[Authorize]
+        [Authorize]
         public ActionResult ActivateProduct(Int64 ProductID)
         {
             try
             {
-                return Ok(_ProductsOchestration.ActivateProduct(ProductID, "string"));
+                return Ok(_ProductsOchestration.ActivateProduct(ProductID, this.User.Identity.Name));
             }
             catch (Exception ex)
             {
@@ -70,12 +70,12 @@ namespace Shoplify.Controllers
         }
 
         [HttpGet("ListProdcts")]
-        //[Authorize]
+        [Authorize]
         public ActionResult ListProdcts(bool active)
         {
             try
             {
-                return Ok(_ProductsOchestration.ListProducts(active, "string"));
+                return Ok(_ProductsOchestration.ListProducts(active, this.User.Identity.Name));
             }
             catch (Exception ex)
             {

@@ -38,7 +38,7 @@ namespace Shoplify.Ochestration.CartOchestration.Implementation
             return $"Item removed";
         }
 
-        public List<Models.DTOs.Item> ListItems(string userName = "string")
+        public List<Models.DTOs.Item> ListItems(string userName)
         {
             try
             {
@@ -60,10 +60,11 @@ namespace Shoplify.Ochestration.CartOchestration.Implementation
             }
         }
 
-        public string CreateCart(AddItem items, Int64 userID)
+        public string CreateCart(AddItem items, string userName)
         {
             var cart = _CartDataService.LookUpCart(1);
             var product = _ProductDataService.GetProduct(items.ProductID);
+            var userID = _UsersDataService.GetUser(userName).UserID;
 
             if (product == null)
                 return $"product not available/does not exist";

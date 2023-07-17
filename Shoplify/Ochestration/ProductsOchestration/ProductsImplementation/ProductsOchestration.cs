@@ -64,7 +64,7 @@ namespace Shoplify.Ochestration.ProductsOchestration.ProductsImplementation
             return $"Failed to create product{product.ProductName}";
         }
 
-        public List<Product> ListProducts(bool active, string userName)
+        public List<ProductList> ListProducts(bool active, string userName)
         {
             var user = _UsersDataService.GetUser(userName);
 
@@ -78,10 +78,10 @@ namespace Shoplify.Ochestration.ProductsOchestration.ProductsImplementation
             else
                 productList = _ProductsDataService.GetInActiveProducts();
 
-            List<Product> products = new List<Product>();
+            List<ProductList> products = new List<ProductList>();
             foreach (var item in productList)
             {
-                products.Add(_Mapper.Map<Product>(item));
+                products.Add(_Mapper.Map<ProductList>(item));
             }
 
             return products;

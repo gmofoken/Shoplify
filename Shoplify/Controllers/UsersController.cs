@@ -19,7 +19,7 @@ namespace Shoplify.Controllers
         }
 
         [HttpPost("CreateUser")]
-        //[Authorize]
+        [Authorize]
         public ActionResult CreateUser(User user)
         {
             try
