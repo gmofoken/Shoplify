@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shoplify.Models;
 using Shoplify.Models.DTOs;
@@ -18,11 +19,12 @@ namespace Shoplify.Controllers
         }
 
         [HttpPost("CreateUser")]
+        //[Authorize]
         public ActionResult CreateUser(User user)
         {
             try
             {
-                return Ok(_UserOchestration.CreateUser(user));
+                return Ok(_UserOchestration.CreateUser(user, this.User.Identity.Name));
             }
             catch (Exception ex)
             {
@@ -34,11 +36,12 @@ namespace Shoplify.Controllers
         }
 
         [HttpPost("ModifyUser")]
+        [Authorize]
         public ActionResult ModifyUser(UserModify user)
         {
             try
             {
-                return Ok(_UserOchestration.ModifyUser(user));
+                return Ok(_UserOchestration.ModifyUser(user, this.User.Identity.Name));
             }
             catch (Exception ex)
             {

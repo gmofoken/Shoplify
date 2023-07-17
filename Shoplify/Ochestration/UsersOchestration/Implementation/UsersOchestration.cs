@@ -17,19 +17,19 @@ namespace Shoplify.Ochestration.UsersOchestration.Implementation
             _Mapper = mapper;
         }
 
-        public string CreateUser(User user)
+        public string CreateUser(User user, string username)
         {
-            if (!user.Username.ToLower().Equals(_UsersDataService.GetUser(user.Username.ToLower())))
+            if (!username.ToLower().Equals(_UsersDataService.GetUser(username.ToLower())))
             {
                 var users = _Mapper.Map<Users>(user);
-
+                users.Username = username;
                 if (_UsersDataService.CreateUser(users))
-                    return $"Succesfully created user{user.Username}";
+                    return $"Succesfully created user: {username}";
             }
-            return $"Unable to create user: {user.Username}";
+            return $"Unable to create user: {username}";
         }
 
-        public string ModifyUser(UserModify user)
+        public string ModifyUser(UserModify user, string username)
         {
             var users = _UsersDataService.GetUser(user.Username);
 
@@ -37,7 +37,7 @@ namespace Shoplify.Ochestration.UsersOchestration.Implementation
             {
                 users.IsAdmin = user.IsAdmin;
                 users.Active = user.IsActive;
-
+                users.Username = username;
                 if (_UsersDataService.ModifyUser(users))
                     return $"Succesfully modified user{user.Username}";
             }

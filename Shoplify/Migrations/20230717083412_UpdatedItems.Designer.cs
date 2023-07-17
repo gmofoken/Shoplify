@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shoplify.Data;
 
@@ -11,9 +12,10 @@ using Shoplify.Data;
 namespace Shoplify.Migrations
 {
     [DbContext(typeof(ShoplifyContext))]
-    partial class ShoplifyContextModelSnapshot : ModelSnapshot
+    [Migration("20230717083412_UpdatedItems")]
+    partial class UpdatedItems
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

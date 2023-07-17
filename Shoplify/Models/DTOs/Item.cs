@@ -1,10 +1,9 @@
 ﻿namespace Shoplify.Models.DTOs
 {
-    public class Product
+    public class Item
     {
-        public string ProductName { get; set; }
+        public Int64 ProductID { get; set; }
         public decimal Price { get; set; }
         public string Description { get; set; }
-        public string ReferenceID { get; set; }
     }
 }

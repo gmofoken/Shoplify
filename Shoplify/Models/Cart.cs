@@ -9,5 +9,16 @@ namespace Shoplify.Models
         public Int64 CartID { get; set; }
         public Int64 UserId { get; set; }
         public decimal TotalValue { get; set; }
+
+        public List<Item> Items { get; set; }
+    }
+
+    public class Item : Base
+    {
+        [Key]
+        public Int64 ItemID { get; set; }
+        public Int64 ProductID { get; set; }
+        public string Description { get; set; }
+        public decimal Price { get; set; }
     }
 }

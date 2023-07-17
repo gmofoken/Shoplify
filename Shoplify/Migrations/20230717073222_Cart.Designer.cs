@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shoplify.Data;
 
@@ -11,9 +12,10 @@ using Shoplify.Data;
 namespace Shoplify.Migrations
 {
     [DbContext(typeof(ShoplifyContext))]
-    partial class ShoplifyContextModelSnapshot : ModelSnapshot
+    [Migration("20230717073222_Cart")]
+    partial class Cart
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +23,21 @@ namespace Shoplify.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("CartProducts", b =>
+                {
+                    b.Property<long>("CartID")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ProductsProductID")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("CartID", "ProductsProductID");
+
+                    b.HasIndex("ProductsProductID");
+
+                    b.ToTable("CartProducts");
+                });
 
             modelBuilder.Entity("Shoplify.Models.Cart", b =>
                 {
@@ -51,46 +68,6 @@ namespace Shoplify.Migrations
                     b.HasKey("CartID");
 
                     b.ToTable("Cart");
-                });
-
-            modelBuilder.Entity("Shoplify.Models.Item", b =>
-                {
-                    b.Property<long>("ItemID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ItemID"), 1L, 1);
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<long?>("CartID")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsComplete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<long>("ProductID")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("ItemID");
-
-                    b.HasIndex("CartID");
-
-                    b.ToTable("Item");
                 });
 
             modelBuilder.Entity("Shoplify.Models.Products", b =>
@@ -176,16 +153,19 @@ namespace Shoplify.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Shoplify.Models.Item", b =>
+            modelBuilder.Entity("CartProducts", b =>
                 {
                     b.HasOne("Shoplify.Models.Cart", null)
-                        .WithMany("Items")
-                        .HasForeignKey("CartID");
-                });
+                        .WithMany()
+                        .HasForeignKey("CartID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-            modelBuilder.Entity("Shoplify.Models.Cart", b =>
-                {
-                    b.Navigation("Items");
+                    b.HasOne("Shoplify.Models.Products", null)
+                        .WithMany()
+                        .HasForeignKey("ProductsProductID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

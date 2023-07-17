@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shoplify.Models.DTOs;
 using Shoplify.Ochestration.ProductsOchestration.ProductsInterface;
@@ -17,10 +19,13 @@ namespace Shoplify.Controllers
         }
         
         [HttpPost("CreateProduct")]
+        [DisableCors]
+        [Authorize]
         public ActionResult CreateProduct(Product product)
         {
             try
             {
+
                 return Ok(_ProductsOchestration.AddProduct(product));
             }
             catch(Exception ex)

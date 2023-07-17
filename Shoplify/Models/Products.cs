@@ -11,6 +11,5 @@ namespace Shoplify.Models
         public string Description { get; set; }
         public bool InStock { get; set; }
         public string ReferenceID { get; set; }
-        public List<Cart> Cart { get; set; }
     }
 }

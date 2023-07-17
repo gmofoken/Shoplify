@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Cors;
 using Shoplify.Models;
 using Shoplify.Models.DTOs;
 using Shoplify.Ochestration.ProductsOchestration.ProductsInterface;
@@ -16,6 +17,7 @@ namespace Shoplify.Ochestration.ProductsOchestration.ProductsImplementation
             _ProductsDataService = productsDataService;
             _Mapper = mapper;
         }
+
 
         public string AddProduct(Product product)
         {
