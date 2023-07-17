@@ -6,14 +6,30 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Shoplify.Data;
+using Shoplify.Ochestration.ProductsOchestration.ProductsImplementation;
+using Shoplify.Ochestration.ProductsOchestration.ProductsInterface;
+using Shoplify.Ochestration.UsersOchestration.Implementation;
+using Shoplify.Ochestration.UsersOchestration.Interface;
+using Shoplify.Services.DataServices.ProductsDataServices.ProductsDataServicesImplementation;
+using Shoplify.Services.DataServices.ProductsDataServices.ProductsDataServicesInterface;
+using Shoplify.Services.DataServices.UsersDataServices.Implementation;
+using Shoplify.Services.DataServices.UsersDataServices.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 //using Fluent.Infrastructure.FluentModel;
 builder.Services.AddDbContext<ShoplifyContext>(options =>
 //using Fluent.Infrastructure.FluentModel;
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'ShoplifyContext' not found.")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+    sqlServerOptionsAction: sqlOptions =>
+    {
+        sqlOptions.EnableRetryOnFailure(
+        maxRetryCount: 10,
+        maxRetryDelay: TimeSpan.FromSeconds(30),
+        errorNumbersToAdd: null);
+    }));
 
 // Add services to the container.
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -50,6 +66,12 @@ builder.Services
             options.ClientSecret = "909346088826-tumf11v8dhjl84i05u0vtf3577jk7trg.apps.googleusercontent.com";
         });
 
+
+//CustomServices
+builder.Services.AddSingleton<IProductsDataService, ProductsDataService> ();
+builder.Services.AddSingleton<IProductsOchestration, ProductsOchestration>();
+builder.Services.AddSingleton<IUserDataService, UserDataService>();
+builder.Services.AddSingleton<IUserOchestration, UsersOchestration>();
 
 var app = builder.Build();
 

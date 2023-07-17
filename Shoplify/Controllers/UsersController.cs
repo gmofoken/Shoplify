@@ -1,82 +1,51 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Shoplify.Models;
+using Shoplify.Models.DTOs;
+using Shoplify.Ochestration.UsersOchestration.Interface;
 
 namespace Shoplify.Controllers
 {
-    public class UsersController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class UsersController : ControllerBase
     {
-        // GET: UsersController
-        public ActionResult Index()
+        private readonly IUserOchestration _UserOchestration;
+
+        public UsersController(IUserOchestration userOchestration)
         {
-            return View();
+            _UserOchestration = userOchestration;
         }
 
-        // GET: UsersController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: UsersController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: UsersController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        [HttpPost("CreateUser")]
+        public ActionResult CreateUser(User user)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                return Ok(_UserOchestration.CreateUser(user));
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return new ObjectResult(ex.Message)
+                {
+                    StatusCode = StatusCodes.Status500InternalServerError
+                };
             }
         }
 
-        // GET: UsersController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: UsersController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        [HttpPost("ModifyUser")]
+        public ActionResult ModifyUser(UserModify user)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                return Ok(_UserOchestration.ModifyUser(user));
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
-            }
-        }
-
-        // GET: UsersController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: UsersController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
+                return new ObjectResult(ex.Message)
+                {
+                    StatusCode = StatusCodes.Status500InternalServerError
+                };
             }
         }
     }

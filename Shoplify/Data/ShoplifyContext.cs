@@ -14,6 +14,9 @@ namespace Shoplify.Data
         {
         }
 
-        public DbSet<Shoplify.Models.Test> Test { get; set; } = default!;
+        public DbSet<Shoplify.Models.Products> Products { get; set; } = default!;
+        public DbSet<Shoplify.Models.Cart> Cart { get; set; } = default!;
+        public DbSet<Shoplify.Models.Users> Users { get; set; } = default!;
+
     }
 }

@@ -1,82 +1,34 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Shoplify.Models.DTOs;
+using Shoplify.Ochestration.ProductsOchestration.ProductsInterface;
 
 namespace Shoplify.Controllers
 {
-    public class ProductsController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ProductsController : ControllerBase
     {
-        // GET: ProductsController
-        public ActionResult Index()
-        {
-            return View();
-        }
+        private readonly IProductsOchestration _ProductsOchestration;
 
-        // GET: ProductsController/Details/5
-        public ActionResult Details(int id)
+        public ProductsController(IProductsOchestration productsOchestration)
         {
-            return View();
+            _ProductsOchestration = productsOchestration;
         }
-
-        // GET: ProductsController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: ProductsController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        
+        [HttpPost("CreateProduct")]
+        public ActionResult CreateProduct(Product product)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                return Ok(_ProductsOchestration.AddProduct(product));
             }
-            catch
+            catch(Exception ex)
             {
-                return View();
-            }
-        }
-
-        // GET: ProductsController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: ProductsController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: ProductsController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: ProductsController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
+                return new ObjectResult(ex.Message)
+                {
+                    StatusCode = StatusCodes.Status500InternalServerError
+                };
             }
         }
     }
