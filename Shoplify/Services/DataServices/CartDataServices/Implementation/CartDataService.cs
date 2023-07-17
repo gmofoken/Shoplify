@@ -54,10 +54,8 @@ namespace Shoplify.Services.DataServices.CartDataServices.Implementation
                 var cart = context.Cart.Where(x => x.UserId == userID && x.Active).Include(p => p.Items).ToListAsync().Result;
                 //var productIDs = cart.P
 
-                new List<Item>();
+                return cart[0].Items;
             }
-
-            return new List<Item>();
         }
 
         public bool CancelCart()

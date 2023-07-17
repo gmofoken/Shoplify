@@ -19,8 +19,18 @@ namespace Shoplify.Ochestration.CartOchestration.Implementation
 
         public List<Models.DTOs.Item> ListItems(Int64 UserID)
         {
-            return null;
-            //return _CartDataService.GetProducts(UserID);
+            try
+            {
+                var results = _CartDataService.GetProducts(UserID);
+
+                List<Models.DTOs.Item> items = new List<Models.DTOs.Item>();
+                items.ForEach(x => items.Add(_Mapper.Map<Models.DTOs.Item>(x)));
+                return items;
+            }
+            catch (Exception)
+            {
+                throw (new Exception("Error retrieving cart"));
+            }
         }
 
         public string CreateCart(Models.DTOs.Item product, Int64 userID)
